@@ -77,3 +77,188 @@ friends = [[0, 1, 0, 0, 0], [1, 0, 1, 0, 0], [0, 1, 0, 1, 0], [0, 0, 1, 0, 1], [
 userA, userB = 0, 4
 
 print(friend_distance(friends, userA, userB))
+
+
+'''
+1 Friend distance (path version)
+* Input: adjacency matrix friends, users userA and userB.
+* Return: the shortest path as a list between userA and userB.
+* Example:
+
+friends = [[0,1,0],[1,0,1],[0,1,0]]
+friend_distance_path(friends, 0, 2) # => [0,1,2]
+
+function friend_distance_path(friends, userA, userB):
+    queue = [(userA, [userA])]   # node, path so far
+    visited = set(userA)
+    
+    while queue not empty:
+        current, path = queue.pop_front()
+        
+        if current == userB:
+            return path
+        
+        for neighbor in friends[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    
+    return -1   # no path exists
+''' 
+
+
+
+
+
+
+'''
+All friends at distance k
+
+Input: adjacency matrix or list, user userA, integer k.
+
+Return: list of all users exactly k friends away from userA.
+
+Example:
+friends = [[0,1,0],[1,0,1],[0,1,0]]
+friends_at_distance_k(friends, 0, 2) # => [2]
+
+function friends_at_distance_k(friends, userA, k):
+    queue = [(userA, 0)]   # node, current distance
+    visited = set(userA)
+    result = []
+    
+    while queue not empty:
+        current, dist = queue.pop_front()
+        
+        if dist == k:
+            result.append(current)
+        elif dist < k:
+            for neighbor in friends[current]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, dist + 1))
+    
+    return result
+
+'''
+
+
+
+'''
+Largest friend circle
+
+Input: adjacency list/matrix of the network.
+
+Return: the size of the largest connected component.
+
+Example:
+
+friends = [[0,1,0,0],[1,0,0,0],[0,0,0,1],[0,0,1,0]]
+largest_friend_circle(friends) # => 2
+
+function largest_friend_circle(friends):
+    visited = set()
+    max_size = 0
+    
+    for user in all users:
+        if user not in visited:
+            size = bfs_size(friends, user, visited)
+            max_size = max(max_size, size)
+    
+    return max_size
+
+function bfs_size(friends, start, visited):
+    queue = [start]
+    visited.add(start)
+    size = 0
+    
+    while queue not empty:
+        current = queue.pop_front()
+        size += 1
+        for neighbor in friends[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    
+    return size
+
+'''
+
+
+
+'''
+Check if users are connected
+
+Input: adjacency list/matrix, userA and userB.
+
+Return: True/False depending on whether there exists any path between them.
+
+Example:
+
+friends = [[0,1,0],[1,0,0],[0,0,0]]
+are_connected(friends, 0, 2) # => False
+
+function are_connected(friends, userA, userB):
+    queue = [userA]
+    visited = set() 
+        
+    while queue not empty:
+        current = queue.pop_front()
+        if userA in visited: 
+            continue 
+        visited.add(userA)
+        if current == userB:
+            return True
+        for neighbor in friends[current]:
+            if neighbor not in visited:
+                queue.append(neighbor)
+    
+    return False
+
+
+'''
+
+
+
+
+
+'''
+Degrees of separation
+
+Input: adjacency matrix/list.
+
+Return: maximum distance between any two connected users (like LinkedIn degrees of separation).
+
+Example:
+
+friends = [[0,1,0],[1,0,1],[0,1,0]]
+max_friend_distance(friends) # => 2
+
+function max_friend_distance(friends):
+    max_dist = 0
+    
+    for userA in all users:
+        distances = bfs_distances(friends, userA)
+        for dist in distances:
+            if dist != -1:
+                max_dist = max(max_dist, dist)
+    
+    return max_dist
+
+function bfs_distances(friends, start):
+    queue = [(start, 0)]
+    visited = set(start)
+    distances = array of -1 for all users
+    distances[start] = 0
+    
+    while queue not empty:
+        current, dist = queue.pop_front()
+        for neighbor in friends[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                distances[neighbor] = dist + 1
+                queue.append((neighbor, dist + 1))
+    
+    return distances
+
+'''
